@@ -22,7 +22,7 @@ function handler (req, res) {
 }
 
 var service = {id: 'lisyoen', 
-	name: 'Simple Chatting', 
+	name: 'Simple Chat', 
 	desc: 'Developed by lisyoen', 
 	url: 'http://lisyoen.dangsam.com',
 	count: 0};
