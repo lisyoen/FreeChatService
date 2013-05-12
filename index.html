@@ -34,7 +34,10 @@ $(function() {
 	});
 	
 	setTimeout( function() {
-		$('#message')[0].select().focus().trigger('change');
+		var message = $('#message');
+		message.select();
+		message.focus();
+		message.trigger('change');
 	}, 1000);
 });
 	</script>
