@@ -18,11 +18,12 @@ function send() {
 $(function() {
 	socket.on('server chat', function(data) {
 		console.log(data);
-		message_list.innerHTML = "Other :" + data.message + "<br />" + message_list.innerHTML;
+		//message_list.innerHTML = "Other :" + data.message + "<br />" + message_list.innerHTML;
+		message_list.innerHTML = message_list.innerHTML + "<br />" + "Other :" + data.message;
 	});
 
 	socket.on('server echo chat', function(data) {
-		message_list.innerHTML = "Me :" + data.message + "<br />" + message_list.innerHTML;
+		message_list.innerHTML = message_list.innerHTML + "Me :" + data.message + "<br />";
 	});
 	
 	socket.on('system report', function(data) {
@@ -57,11 +58,10 @@ $(function() {
 			<h4 style="margin-left: 0%; margin-right: 0%">Simple Chat</h4>
 		</div>
 		<div data-role="content" id="Content1">
-			<div data-role="fieldcontain">
-				<input type="text" id="message" name="message" data-clear-btn="true" tabindex="0" onkeydown="if (event.keyCode == 13) send() " id="input">
-				<button type="button" data-inline="true" data-mini="true" onclick="send()">Send</button>
+			<div id="commonRoom" style=" height:300px; overflow: auto;">
+				<div id="message_list"></div>
 			</div>
-			<div id="message_list"></div>
+			<input type="text" id="message" name="message" data-clear-btn="true" tabindex="0" onkeydown="if (event.keyCode == 13) send() " id="input">
 		</div>
 	</div>
 </body>
