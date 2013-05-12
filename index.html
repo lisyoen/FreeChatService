@@ -16,14 +16,20 @@ function send() {
 }
 
 $(function() {
+	function echoMessage(msg) {
+		chatContents.innerHTML = chatContents.innerHTML + '<br />' + msg + '<br />';
+		$('#commonRoom').animate({scrollTop:$('#chatContents').height()}); 
+	}
+	
 	socket.on('server chat', function(data) {
 		console.log(data);
 		//message_list.innerHTML = "Other :" + data.message + "<br />" + message_list.innerHTML;
-		message_list.innerHTML = message_list.innerHTML + "<br />" + "Other :" + data.message;
+		echoMessage("Other :" + data.message);
+		
 	});
 
 	socket.on('server echo chat', function(data) {
-		message_list.innerHTML = message_list.innerHTML + "Me :" + data.message + "<br />";
+		echoMessage("Me :" + data.message);
 	});
 	
 	socket.on('system report', function(data) {
@@ -58,8 +64,8 @@ $(function() {
 			<h4 style="margin-left: 0%; margin-right: 0%">Simple Chat</h4>
 		</div>
 		<div data-role="content" id="Content1">
-			<div id="commonRoom" style=" height:300px; overflow: auto;">
-				<div id="message_list"></div>
+			<div id="commonRoom" style="height:300px; overflow: auto;">
+				<div id="chatContents"></div>
 			</div>
 			<input type="text" id="message" name="message" data-clear-btn="true" tabindex="0" onkeydown="if (event.keyCode == 13) send() " id="input">
 		</div>
