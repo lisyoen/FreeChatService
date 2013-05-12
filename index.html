@@ -15,10 +15,6 @@ function send() {
 	message.value = "";
 }
 
-$('#page1').bind('pageshow', function() {
-	$('#message')[0].select().focus().trigger('change');
-});
-
 $(function() {
 	socket.on('server chat', function(data) {
 		console.log(data);
@@ -37,6 +33,7 @@ $(function() {
 		}
 	});
 	
+	$('#message')[0].select().focus().trigger('change');
 });
 	</script>
 <script type="text/javascript">
