@@ -33,14 +33,7 @@ $(function() {
 		}
 	});
 	
-	setTimeout( function() {
-		var message = $('#message');
-		message.select();
-		message.focus();
-		message.trigger('change');
-		
-		message.click();
-	}, 1000);
+	$('#message').select().focus().trigger('change');
 });
 	</script>
 <script type="text/javascript">
