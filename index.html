@@ -17,7 +17,7 @@ function send() {
 
 $(function() {
 	function echoMessage(msg) {
-		chatContents.innerHTML = chatContents.innerHTML + '<br />' + msg + '<br />';
+		chatContents.innerHTML = chatContents.innerHTML + '<br />' + msg;
 		$('#commonRoom').animate({scrollTop:$('#chatContents').height()}); 
 	}
 	
@@ -34,9 +34,9 @@ $(function() {
 	
 	socket.on('system report', function(data) {
 		if (data.err) {
-			message_list.innerHTML = "Error :" + data.stderr + "<br />" + message_list.innerHTML;
+			echoMessage('Error :' + data.stderr);
 		} else {
-			message_list.innerHTML = "System :" + data.stdout + "<br />" + message_list.innerHTML;
+			echoMessage('System :' + data.stdout);
 		}
 	});
 	
