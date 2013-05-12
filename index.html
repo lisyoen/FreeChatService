@@ -15,7 +15,7 @@ function send() {
 	message.value = "";
 }
 
-$('#page1').live('pageshow', function() {
+$('#page1').bind('pageshow', function() {
 	$('#message')[0].select().focus().trigger('change');
 });
 
