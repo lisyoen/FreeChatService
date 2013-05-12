@@ -55,9 +55,11 @@ $(function() {
 			<h4 style="margin-left: 0%; margin-right: 0%">Simple Chat</h4>
 		</div>
 		<div data-role="content" id="Content1">
-			<label for="message">Message</label>
-			<input type="text" name="message" data-clear-btn="true" onkeydown="if (event.keyCode == 13) send() " id="input">
-			<button type="button" data-inline="true" onclick="send()">Send</button>
+			<div data-role="fieldcontain">
+				<label for="message">Message</label>
+				<input type="text" name="message" data-clear-btn="true" onkeydown="if (event.keyCode == 13) send() " id="input">
+				<button type="button" data-inline="true" onclick="send()">Send</button>
+			</div>
 			<div id="message_list"></div>
 		</div>
 	</div>
