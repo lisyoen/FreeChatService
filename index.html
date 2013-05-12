@@ -33,7 +33,9 @@ $(function() {
 		}
 	});
 	
-	$('#message')[0].select().focus().trigger('change');
+	setTimeout( function() {
+		$('#message')[0].select().focus().trigger('change');
+	}, 1000);
 });
 	</script>
 <script type="text/javascript">
