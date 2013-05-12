@@ -33,9 +33,9 @@ $(function() {
 		}
 	});
 	
-	setTimeout(function() {
+	$('#page1').live('pageshow', function() {
 		$('#message')[0].select().focus().trigger('change');
-	}, 0);
+	});
 });
 	</script>
 <script type="text/javascript">
