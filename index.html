@@ -34,7 +34,7 @@ $(function() {
 	});
 	
 	setTimeout(function() {
-		$('#message')[0].focus();
+		$('#message')[0].select().focus().trigger('change');
 	}, 0);
 });
 	</script>
