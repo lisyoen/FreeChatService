@@ -32,6 +32,8 @@ $(function() {
 			message_list.innerHTML = "System :" + data.stdout + "<br />" + message_list.innerHTML;
 		}
 	});
+	
+	$('#message')[0].focus();
 });
 	</script>
 <script type="text/javascript">
@@ -56,7 +58,7 @@ $(function() {
 		</div>
 		<div data-role="content" id="Content1">
 			<div data-role="fieldcontain">
-				<input type="text" name="message" data-clear-btn="true" autofocus onkeydown="if (event.keyCode == 13) send() " id="input">
+				<input type="text" id="message" name="message" data-clear-btn="true" autofocus onkeydown="if (event.keyCode == 13) send() " id="input">
 				<button type="button" data-inline="true" data-mini="true" onclick="send()">Send</button>
 			</div>
 			<div id="message_list"></div>
