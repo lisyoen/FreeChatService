@@ -8,7 +8,59 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 	<script src="http://lisyoen.cafe24.com:8003/socket.io/socket.io.js"></script>
+	<script src="jquery.cookie.js"></script>
 	<script src="main.js"></script>
+<script type="text/javascript">
+	function _view() {
+		var lastMessage;
+		
+		// type msg {nickname, message}
+		this.echoMessage = function(msg) {
+			msg.time = new Date();
+			var list = $('#chatList');
+			if (lastMessage && 
+				(lastMessage.nickname === msg.nickname && msg.time - lastMessage.time < 10000)) {
+				// append to last message
+				$('#chatList li').last().append($('<p>').text(msg.message));
+			} else {
+				// add new message
+				var newItem = $('<li>')
+					.append($('<h4>').text(msg.nickname))
+					.append($('<p>', {'class': 'ui-li-aside'}).text(msg.time.toLocaleTimeString()))
+					.append($('<p>').text(msg.message));
+				list.append(newItem);
+			}
+			lastMessage = msg;
+			
+			list.listview('refresh');
+			//$('#chatContent').animate({scrollTop:list.height()}); 
+		}
+		
+		// string msg
+		this.echoSystemMessage = function(msg) {
+			lastMessage = undefined;
+			var list = $('#chatList');
+			var newItem = $('<li>', {'data-role': 'list-divider'}).text(msg);
+			list.append(newItem);
+			list.listview('refresh');
+			//$('#chatContent').animate({scrollTop:list.height()}); 
+		}
+		
+		this.setFocusToInput = function() {
+			('#message').focus().select();
+		}
+		
+		this.openLoginPopup = function() {
+			$('#popupLogin').popup("open");
+		}
+		
+		this.closeLoginPopup = function() {
+			$('#popupLogin').popup("close");
+		}
+	}
+	var view = new _view();
+
+</script>
 
 <script type="text/javascript">
 
@@ -23,65 +75,29 @@
   })();
 
 </script>
-	
+
 </head>
 <body>
-	<div data-role="page" id="page1">
-		<div data-role="header" id="header1">
-			<h4 id="title" style="margin-left: 0%; margin-right: 0%">Simple Chat</h4>
-		</div>
+	<div data-role="page" id="page1" style="">
 		<div data-role="content" id="Content1" style="padding: 0px;">
-			<div id="commonRoom" style="height:200px; overflow-y: scroll; overflow-x: auto;">
-				<div id="chatContents" style="width: 100%; word-wrap: break-word;"></div>
-				<ul data-role="listview" style="margin: 0px; display: none">
-					<li data-role="list-divider">Simple Chat<span id="usercount" class="ui-li-count">2</span></li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-					<li>
-						<h4>lisyoen</h4>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p>This is message</p>
-						<p class="ui-li-aside">22:53</p>
-					</li>
-				</ul>
+			<!-- <div id="chatContent" style="height:400px; overflow-y:scroll; overflow-x:auto; width:100%; position:fixed; bottom:40px;"> -->
+				<div style="position:fixed; bottom:0px; width:100%;">
+					<ul data-role="listview" id="chatList" style="margin: 0px;" data-theme="c">
+					</ul>
+					<a href="#popupLogin" style="position:fixed; right:0px; bottom:47px;" data-role="button" 
+						data-rel="popup" data-icon="refresh" data-iconpos="notext" 
+						data-inline="true" data-position-to="window">Change Nickname</a>
+					<input type="text" id="message" name="message" data-clear-btn="true" tabindex="0" 
+						placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {send(message.value); message.value='';}}" data-theme="c">
+				</div>
+			<!-- </div> -->
+			<div data-role="popup" id="popupLogin" class="ui-corner-all" data-theme="a">
+				<div style="padding:10px 20px;">
+					<h3>Please sign in</h3>
+					<input type="text" name="user" id="username" value="" placeholder="username" data-theme="a">
+					<button data-theme="b" data-icon="check" onclick="javascript:changeNickname(username.value)">Sign in</button>
+				</div>
 			</div>
-		</div>
-		<div data-role="footer" id="footer1">
-			<input type="text" id="message" name="message" data-mini="true" data-clear-btn="true" tabindex="0" placeholder="Enter your message" onkeydown="if (event.keyCode == 13) send()">
 		</div>
 	</div>
 </body>

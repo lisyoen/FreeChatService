@@ -1,40 +1,66 @@
 var socket = io.connect('http://lisyoen.cafe24.com:8003');
 
-function send() {
-  socket.emit('client chat', {message:message.value});
-	message.value = "";
+var user = {
+	nickname: 'User' + parseInt(Math.random() * 10000)
+};
+
+function send(msg) {
+	if (msg.trim().length === 0) return;
+	socket.emit('client chat', {nickname: user.nickname, message: msg});
+}
+
+function changeNickname(nickname) {
+	if (nickname.trim().length > 0) {
+		user.nickname = nickname;
+		setNickname(nickname);
+	}
+	view.closeLoginPopup();
+	view.setFocusToInput();
+}
+
+function getNickname() {
+	return $.cookie('nickname');
+}
+
+function setNickname(nickname) {
+	return $.cookie('nickname', nickname);
 }
 
 $(function() {
-	function echoMessage(msg) {
-		chatContents.innerHTML = chatContents.innerHTML + '<br />' + msg;
-		$('#commonRoom').animate({scrollTop:$('#chatContents').height()}); 
+	var nickname = getNickname();
+	if (nickname) {
+		user.nickname = nickname;
+	} else {
+		setNickname(user.nickname);
 	}
+
+	socket.on('connect', function () {
+		console.log('connect');
+		console.log(socket);
+		socket.emit('client join', {nickname: user.nickname});
+	});
 
 	socket.on('server chat', function(data) {
 		console.log(data);
-		//message_list.innerHTML = "Other :" + data.message + "<br />" + message_list.innerHTML;
-		echoMessage("Other :" + data.message);
-
+		view.echoMessage({nickname: data.nickname, message: data.message});
 	});
 
 	socket.on('server echo chat', function(data) {
-		echoMessage("Me :" + data.message);
+		console.log(data);
+		view.echoMessage({nickname: data.nickname, message: data.message});
 	});
 
 	socket.on('system report', function(data) {
 		if (data.err) {
-			echoMessage('Error :' + data.stderr);
+			view.echoSystemMessage('Error :' + data.stderr);
 		} else {
-			echoMessage('System :' + data.stdout);
+			view.echoSystemMessage('System :' + data.stdout);
 		}
+	});
+	
+	socket.on('system chat', function(data) {
+		view.echoSystemMessage(data.message);
 	});
 
 	$('#message').select().focus().trigger('change');
-	
-	//$('#scrollview').css('height', window.innerHeight - parseInt($('#header1').css('height')) - parseInt($('#footer1').css('height')) - 10 + 'px');
-	// window.onresize = function(e) {
-		// console.log("resize"); console.log(e); console.log(e.target.innerHeight);
-		// $('#title').text(e.target.innerHeight);
-	// }
 });

@@ -38,8 +38,23 @@ monitor.report(service);
 	}, 10000);
 })();
 
-io.sockets.on('connection', function (socket) {
-	socket.on('client chat', function (data) {
+io.sockets.on('connection', function(socket) {
+	socket.user = {
+		nickname: ''
+	};
+	
+	socket.on('client join', function(data) {
+		console.log('join');
+		if (!data) return;
+		if (!data.nickname) return;
+		
+		socket.user.nickname = data.nickname;
+		
+		socket.emit('system chat', {message: data.nickname + ' entered'});
+		socket.broadcast.emit('system chat', {message: data.nickname + ' entered'});
+	});
+
+	socket.on('client chat', function(data) {
 		console.log(data);
 		socket.emit('server echo chat', data);
 		socket.broadcast.emit("server chat", data);
@@ -58,22 +73,28 @@ io.sockets.on('connection', function (socket) {
 		});
 	}
 	
-	socket.on('git pull', function (data) {
+	socket.on('git pull', function(data) {
 		console.log('git pull');
 		echo_exec('git pull', function() {});
 	});
 
-	socket.on('restart', function (data) {
+	socket.on('restart', function(data) {
 		console.log('restart');
 		echo_exec('forever restart chat.js', function() {});
 	});
 
-	socket.on('disconnect', function (socket) {
+	socket.on('disconnect', function(socket) {
 		console.log('disconnect');
+
+		socket.broadcast.emit('system chat', {message: socket.user.nickname + ' left'});
+
 		service.count--;
 		monitor.report(service);
 	});
 
+	//socket.emit('server info', data);
+	//socket.broadcast.emit("server info", data);
+	
 	service.count++;
 	monitor.report(service);
 });
