@@ -63,4 +63,6 @@ $(function() {
 	socket.on('system chat', function(data) {
 		view.echoSystemMessage(data.message);
 	});
+
+	view.setFocusToInput();
 });
