@@ -31,4 +31,10 @@ $(function() {
 	});
 
 	$('#message').select().focus().trigger('change');
+	
+	//$('#scrollview').css('height', window.innerHeight - parseInt($('#header1').css('height')) - parseInt($('#footer1').css('height')) - 10 + 'px');
+	// window.onresize = function(e) {
+		// console.log("resize"); console.log(e); console.log(e.target.innerHeight);
+		// $('#title').text(e.target.innerHeight);
+	// }
 });
