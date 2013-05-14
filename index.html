@@ -48,7 +48,7 @@
 		}
 		
 		this.setFocusToInput = function() {
-			('#message').focus().select();
+			$('#message').select().focus().trigger('change');
 		}
 		
 		this.openLoginPopup = function() {
