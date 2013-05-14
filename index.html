@@ -58,6 +58,14 @@
 		this.closeLoginPopup = function() {
 			$('#popupLogin').popup("close");
 		}
+		
+		this.setUsername = function(username) {
+			$('#username').val(username);
+		}
+		
+		this.getUsername = function() {
+			return $('#username').val();
+		}
 	}
 	var view = new _view();
 
