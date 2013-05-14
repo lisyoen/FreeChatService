@@ -33,7 +33,7 @@
 			lastMessage = msg;
 			
 			list.listview('refresh');
-			if ($('body') < $('#chatContainer').height()) {
+			if ($('body').height() < $('#chatContainer').height()) {
 				$('body').animate({scrollTop: $('#page1').height()});
 			}
 		}
@@ -46,7 +46,7 @@
 			list.append(newItem);
 			$('#ad').appendTo('#chatList');
 			list.listview('refresh');
-			if ($('body') < $('#chatContainer').height()) {
+			if ($('body').height() < $('#chatContainer').height()) {
 				$('body').animate({scrollTop: $('#page1').height()});
 			}
 		}
