@@ -39,25 +39,29 @@ monitor.report(service);
 })();
 
 io.sockets.on('connection', function(socket) {
-	socket.user = {
-		nickname: ''
-	};
 	
 	socket.on('client join', function(data) {
 		console.log('join');
+		var user = {nickname: ''};
+		socket.emit('system chat', {message: 'Connected'});
 		if (!data) return;
 		if (!data.nickname) return;
-		
-		socket.user.nickname = data.nickname;
-		
-		socket.emit('system chat', {message: data.nickname + ' entered'});
-		socket.broadcast.emit('system chat', {message: data.nickname + ' entered'});
+		user.nickname = data.nickname;
+		socket.set('user', user, function(err) {
+			if (err) {throw err;}
+			socket.emit('system chat', {message: user.nickname + ' entered'});
+			socket.broadcast.emit('system chat', {message: user.nickname + ' entered'});
+		});
 	});
 
 	socket.on('client chat', function(data) {
 		console.log(data);
 		socket.emit('server echo chat', data);
 		socket.broadcast.emit("server chat", data);
+		var user = {nickname: data.nickname};
+		socket.set('user', user, function(err) {
+			if (err) {throw err;}
+		});
 	});
 	
 	function echo_exec(cmd, callback) {
@@ -83,10 +87,12 @@ io.sockets.on('connection', function(socket) {
 		echo_exec('forever restart chat.js', function() {});
 	});
 
-	socket.on('disconnect', function(socket) {
+	socket.on('disconnect', function() {
 		console.log('disconnect');
 
-		socket.broadcast.emit('system chat', {message: socket.user.nickname + ' left'});
+		socket.get('user', function(err, user) {
+			socket.broadcast.emit('system chat', {message: user.nickname + ' left'});
+		});
 
 		service.count--;
 		monitor.report(service);

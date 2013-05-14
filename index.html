@@ -21,13 +21,13 @@
 			if (lastMessage && 
 				(lastMessage.nickname === msg.nickname && msg.time - lastMessage.time < 10000)) {
 				// append to last message
-				$('#chatList li').last().append($('<p>').text(msg.message));
+				$('#chatList li').last().append($('<p>').css({'overflow': 'visible', 'white-space': 'normal'}).text(msg.message));
 			} else {
 				// add new message
 				var newItem = $('<li>')
 					.append($('<h4>').text(msg.nickname))
-					.append($('<p>', {'class': 'ui-li-aside'}).text(msg.time.toLocaleTimeString()))
-					.append($('<p>').text(msg.message));
+					.append($('<p>').addClass('ui-li-aside').text(msg.time.toLocaleTimeString()))
+					.append($('<p>').css({'overflow': 'visible', 'white-space': 'normal'}).text(msg.message));
 				list.append(newItem);
 			}
 			lastMessage = msg;
@@ -42,6 +42,7 @@
 			var list = $('#chatList');
 			var newItem = $('<li>', {'data-role': 'list-divider'}).text(msg);
 			list.append(newItem);
+			$('#ad').appendTo('#chatList');
 			list.listview('refresh');
 			//$('#chatContent').animate({scrollTop:list.height()}); 
 		}
@@ -83,11 +84,24 @@
 			<!-- <div id="chatContent" style="height:400px; overflow-y:scroll; overflow-x:auto; width:100%; position:fixed; bottom:40px;"> -->
 				<div style="position:fixed; bottom:0px; width:100%;">
 					<ul data-role="listview" id="chatList" style="margin: 0px;" data-theme="c">
+<div id="ad">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-5187271410488826";
+/* 468x60, 작성됨 11. 1. 12 Jobs 상하단용 */
+google_ad_slot = "9658017922";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
 					</ul>
-					<a href="#popupLogin" style="position:fixed; right:0px; bottom:47px;" data-role="button" 
+					<a href="#popupLogin" style="position:fixed; right:0px; bottom:36px;" data-role="button" 
 						data-rel="popup" data-icon="refresh" data-iconpos="notext" 
 						data-inline="true" data-position-to="window">Change Nickname</a>
-					<input type="text" id="message" name="message" data-clear-btn="true" tabindex="0" 
+					<input type="text" id="message" name="message" data-mini="true" data-clear-btn="true" tabindex="0" 
 						placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {send(message.value); message.value='';}}" data-theme="c">
 				</div>
 			<!-- </div> -->
