@@ -33,6 +33,8 @@ $(function() {
 	} else {
 		setNickname(user.nickname);
 	}
+	
+	view.setUsername(user.nickname);
 
 	socket.on('connect', function () {
 		console.log('connect');
@@ -61,6 +63,4 @@ $(function() {
 	socket.on('system chat', function(data) {
 		view.echoSystemMessage(data.message);
 	});
-
-	$('#message').select().focus().trigger('change');
 });
