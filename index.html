@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
-	<script src="http://lisyoen.cafe24.com:8003/socket.io/socket.io.js"></script>
+	<script src="http://chat.dangsam.com:8003/socket.io/socket.io.js"></script>
 	<script src="jquery.cookie.js"></script>
 <script type="text/javascript">
 	function _view() {
@@ -30,10 +30,14 @@
 				list.append(newItem);
 			}
 			lastMessage = msg;
-			
 			list.listview('refresh');
-			if ($('body').height() < $('#chatContainer').height()) {
-				$('body').animate({scrollTop: $('#page1').height()});
+			
+			var chatContainer = $('#chatContainer');
+			if ($('body').height() < chatContainer.height()) {
+				chatContainer.css('position', 'relative');
+				$('body').animate({scrollTop: $('#page1').height()}, 0);
+			} else {
+				chatContainer.css('position', 'fixed');
 			}
 		}
 		
@@ -45,13 +49,18 @@
 			list.append(newItem);
 			$('#ad').appendTo('#chatList');
 			list.listview('refresh');
-			if ($('body').height() < $('#chatContainer').height()) {
-				$('body').animate({scrollTop: $('#page1').height()});
+
+			var chatContainer = $('#chatContainer');
+			if ($('body').height() < chatContainer.height()) {
+				chatContainer.css('position', 'relative');
+				$('body').animate({scrollTop: $('#page1').height()}, 0);
+			} else {
+				chatContainer.css('position', 'fixed');
 			}
 		}
 		
 		this.setFocusToInput = function() {
-			('#message').focus().select();
+			$('#message').focus().select();
 		}
 		
 		this.openLoginPopup = function() {
@@ -76,10 +85,8 @@
 		};
 		
 		this.on = function(event, handler) {
-			console.log('bind ' + event);
 			if (handlers[event]) {
 				handlers[event] = handler;
-				console.log('complete');
 			};
 		}
 		
@@ -114,10 +121,20 @@
 </head>
 <body>
 	<div data-role="page" id="page1" style="">
+		<div data-role="panel" id="menuPanel" data-position="right">
+			<ul data-role="listview" id="userList">
+				<li data-role="list-divider">Users</li>
+				<li>lisyoen</li>
+				<li>lisyoen</li>
+				<li>lisyoen</li>
+				<li><a href="#popupLogin" data-rel="popup">
+				Change Nickname
+				</a></li>
+			</ul>
+		</div>
 		<div data-role="content" id="Content1" style="padding: 0px;">
-			<!-- <div id="chatContent" style="height:400px; overflow-y:scroll; overflow-x:auto; width:100%; position:fixed; bottom:40px;"> -->
-				<div style="position:fixed; bottom:0px; width:100%;">
-					<ul data-role="listview" id="chatList" style="margin: 0px;" data-theme="c">
+			<div id="chatContainer" style="position:fixed; bottom:0px; width:100%;">
+				<ul data-role="listview" id="chatList" style="margin: 0px;" data-theme="c">
 <div id="ad">
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-5187271410488826";
@@ -131,14 +148,20 @@ google_ad_height = 60;
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 </div>
-					</ul>
-					<a href="#popupLogin" style="position:fixed; right:0px; bottom:36px;" data-role="button" 
-						data-rel="popup" data-icon="refresh" data-iconpos="notext" 
-						data-inline="true" data-position-to="window">Change Nickname</a>
-					<input type="text" id="message" name="message" data-mini="true" data-clear-btn="true" tabindex="0" 
-						placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {view.emit('send message', message.value); message.value='';}}" data-theme="c">
+				</ul>
+				<!--
+				<a href="#popupLogin" style="position:fixed; right:0px; bottom:36px;" data-role="button" 
+					data-rel="popup" data-icon="refresh" data-iconpos="notext" 
+					data-inline="true" data-position-to="window">Change Nickname</a>
+				-->
+				<div style="width:100%; text-align:right; margin-top:-40px;">
+				<a href="#menuPanel" style="position:relative; right:0px;" data-role="button" 
+					data-icon="bars" data-iconpos="notext" 
+					data-inline="true" data-position-to="window">Change Nickname</a>
 				</div>
-			<!-- </div> -->
+				<input type="text" id="message" name="message" data-mini="true" data-clear-btn="true" tabindex="0" 
+					placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {view.emit('send message', message.value); message.value='';}}" data-theme="c">
+			</div>
 			<div data-role="popup" id="popupLogin" class="ui-corner-all" data-theme="a">
 				<div style="padding:10px 20px;">
 					<h3>Please sign in</h3>

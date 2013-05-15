@@ -38,10 +38,15 @@ monitor.report(service);
 	}, 10000);
 })();
 
+//var users = {};
+
 io.sockets.on('connection', function(socket) {
 	
 	socket.on('client join', function(data) {
 		console.log('join');
+
+		//users[socket.id] = {nickname: 'unknown'};
+		
 		var user = {nickname: ''};
 		socket.emit('system chat', {message: 'Connected'});
 		if (!data) return;
@@ -52,6 +57,8 @@ io.sockets.on('connection', function(socket) {
 			socket.emit('system chat', {message: user.nickname + ' entered'});
 			socket.broadcast.emit('system chat', {message: user.nickname + ' entered'});
 		});
+		
+		//socket.emit('server user list', 
 	});
 
 	socket.on('client chat', function(data) {
