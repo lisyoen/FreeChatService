@@ -3,13 +3,12 @@
 <head>
 	<meta charset="utf-8" >
 	<meta name="viewport" content="width=device-width, initial-scale=1" >
-	<title>lisyoen's Simple Chat</title>
+	<title>lisyoen's www root</title>
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 	<script src="http://lisyoen.cafe24.com:8003/socket.io/socket.io.js"></script>
 	<script src="jquery.cookie.js"></script>
-	<script src="main.js"></script>
 <script type="text/javascript">
 	function _view() {
 		var lastMessage;
@@ -52,28 +51,51 @@
 		}
 		
 		this.setFocusToInput = function() {
-			$('#message').select().focus().trigger('change');
+			('#message').focus().select();
 		}
 		
 		this.openLoginPopup = function() {
-			$('#popupLogin').popup("open");
+			$('#popupLogin').popup('open');
 		}
 		
 		this.closeLoginPopup = function() {
-			$('#popupLogin').popup("close");
+			$('#popupLogin').popup('close');
 		}
 		
 		this.setUsername = function(username) {
 			$('#username').val(username);
 		}
-		
+
 		this.getUsername = function() {
 			return $('#username').val();
 		}
+		
+		var handlers = {
+			'send message': function() {},
+			'change nickname': function() {}
+		};
+		
+		this.on = function(event, handler) {
+			console.log('bind ' + event);
+			if (handlers[event]) {
+				handlers[event] = handler;
+				console.log('complete');
+			};
+		}
+		
+		this.emit = function(event) {
+			if (handlers[event]) {
+				var arg = Array.prototype.slice.call(arguments, 1);
+				return handlers[event].apply(this, arg);
+			} else {
+				throw '"' + event + '" has not been bound';
+			}
+		}
 	}
-	var view = new _view();
+	view = new _view();
 
 </script>
+	<script src="main.js"></script>
 
 <script type="text/javascript">
 
@@ -92,9 +114,9 @@
 </head>
 <body>
 	<div data-role="page" id="page1" style="">
-		<div data-role="content" id="Content1" style="padding:0px;">
+		<div data-role="content" id="Content1" style="padding: 0px;">
 			<!-- <div id="chatContent" style="height:400px; overflow-y:scroll; overflow-x:auto; width:100%; position:fixed; bottom:40px;"> -->
-				<div id="chatContainer" style="bottom:0px; width:100%;">
+				<div style="position:fixed; bottom:0px; width:100%;">
 					<ul data-role="listview" id="chatList" style="margin: 0px;" data-theme="c">
 <div id="ad">
 <script type="text/javascript"><!--
@@ -114,14 +136,14 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 						data-rel="popup" data-icon="refresh" data-iconpos="notext" 
 						data-inline="true" data-position-to="window">Change Nickname</a>
 					<input type="text" id="message" name="message" data-mini="true" data-clear-btn="true" tabindex="0" 
-						placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {send(message.value); message.value='';}}" data-theme="c">
+						placeholder="Enter your message" onkeydown="javascript:{if (event.keyCode == 13) {view.emit('send message', message.value); message.value='';}}" data-theme="c">
 				</div>
 			<!-- </div> -->
 			<div data-role="popup" id="popupLogin" class="ui-corner-all" data-theme="a">
 				<div style="padding:10px 20px;">
 					<h3>Please sign in</h3>
 					<input type="text" name="user" id="username" value="" placeholder="username" data-theme="a">
-					<button data-theme="b" data-icon="check" onclick="javascript:changeNickname(username.value)">Sign in</button>
+					<button data-theme="b" data-icon="check" onclick="javascript:view.emit('change nickname', username.value)">Sign in</button>
 				</div>
 			</div>
 		</div>

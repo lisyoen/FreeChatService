@@ -4,29 +4,15 @@ var user = {
 	nickname: 'User' + parseInt(Math.random() * 10000)
 };
 
-function send(msg) {
-	if (msg.trim().length === 0) return;
-	socket.emit('client chat', {nickname: user.nickname, message: msg});
-}
-
-function changeNickname(nickname) {
-	if (nickname.trim().length > 0) {
-		user.nickname = nickname;
-		setNickname(nickname);
-	}
-	view.closeLoginPopup();
-	view.setFocusToInput();
-}
-
-function getNickname() {
-	return $.cookie('nickname');
-}
-
-function setNickname(nickname) {
-	return $.cookie('nickname', nickname);
-}
 
 $(function() {
+	function getNickname() {
+		return $.cookie('nickname');
+	}
+
+	function setNickname(nickname) {
+		return $.cookie('nickname', nickname);
+	}
 	var nickname = getNickname();
 	if (nickname) {
 		user.nickname = nickname;
@@ -62,6 +48,20 @@ $(function() {
 	
 	socket.on('system chat', function(data) {
 		view.echoSystemMessage(data.message);
+	});
+	
+	view.on("send message", function(msg) {
+		if (msg.trim().length === 0) return;
+		socket.emit('client chat', {nickname: user.nickname, message: msg});
+	});
+
+	view.on("change nickname", function(nickname) {
+		if (nickname.trim().length > 0) {
+			user.nickname = nickname;
+			setNickname(nickname);
+		}
+		view.closeLoginPopup();
+		view.setFocusToInput();
 	});
 
 	view.setFocusToInput();
