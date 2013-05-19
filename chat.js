@@ -24,7 +24,7 @@ function handler (req, res) {
 var service = {id: 'lisyoen', 
 	name: 'Simple Chatting', 
 	desc: 'Developed by lisyoen', 
-	url: 'http://lisyoen.dangsam.com',
+	url: 'http://free.dangsam.com/lisyoen',
 	count: 0};
 monitor.report(service);
 
